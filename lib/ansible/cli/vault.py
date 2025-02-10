@@ -84,7 +84,7 @@ class VaultCLI(CLI):
         create_parser.add_argument('--skip-tty-check', default=False, help='allows editor to be opened when no tty attached',
                                    dest='skip_tty_check', action='store_true')
 
-        decrypt_parser = subparsers.add_parser('decrypt', help='Decrypt vault encrypted file', parents=[output, common])
+        decrypt_parser = subparsers.add_parser('decrypt', help='Decrypt vault encrypted file or string', parents=[output, common])
         decrypt_parser.set_defaults(func=self.execute_decrypt)
         decrypt_parser.add_argument('args', help='Filename', metavar='file_name', nargs='*')
 
@@ -138,11 +138,12 @@ class VaultCLI(CLI):
             raise AnsibleOptionsError("At most one input file may be used with the --output option")
 
         if options.action == 'encrypt_string':
-            if '-' in options.args or not options.args or options.encrypt_string_stdin_name:
+            if '-' in options.args or options.encrypt_string_stdin_name or (not options.args and not options.encrypt_string_prompt):
+                # prompting from stdin and reading from stdin are mutually exclusive, if stdin is still provided, it is ignored
                 self.encrypt_string_read_stdin = True
 
-            # TODO: prompting from stdin and reading from stdin seem mutually exclusive, but verify that.
             if options.encrypt_string_prompt and self.encrypt_string_read_stdin:
+                # should only trigger if prompt + either - or encrypt string stdin name were provided
                 raise AnsibleOptionsError('The --prompt option is not supported if also reading input from stdin')
 
         return options

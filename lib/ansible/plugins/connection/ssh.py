@@ -389,7 +389,7 @@ from ansible.errors import (
 from ansible.module_utils.six import PY3, text_type, binary_type
 from ansible.module_utils.common.text.converters import to_bytes, to_native, to_text
 from ansible.plugins.connection import ConnectionBase, BUFSIZE
-from ansible.plugins.shell.powershell import _parse_clixml
+from ansible.plugins.shell.powershell import _replace_stderr_clixml
 from ansible.utils.display import Display
 from ansible.utils.path import unfrackpath, makedirs_safe
 
@@ -450,6 +450,7 @@ def _handle_error(
                               'Upgrade sshpass to use sshpass_prompt, or otherwise switch to ssh keys.'
                     raise AnsibleError('{0} {1}'.format(msg, details))
                 msg = '{0} {1}'.format(msg, details)
+            raise AnsibleConnectionFailure(msg)
 
     if return_tuple[0] == 255:
         SSH_ERROR = True
@@ -1329,8 +1330,8 @@ class Connection(ConnectionBase):
         (returncode, stdout, stderr) = self._run(cmd, in_data, sudoable=sudoable)
 
         # When running on Windows, stderr may contain CLIXML encoded output
-        if getattr(self._shell, "_IS_WINDOWS", False) and stderr.startswith(b"#< CLIXML"):
-            stderr = _parse_clixml(stderr)
+        if getattr(self._shell, "_IS_WINDOWS", False):
+            stderr = _replace_stderr_clixml(stderr)
 
         return (returncode, stdout, stderr)
 

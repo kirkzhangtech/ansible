@@ -1,3 +1,4 @@
+.github/ISSUE_TEMPLATE/internal_issue.md pymarkdown!skip
 lib/ansible/config/base.yml no-unwanted-files
 lib/ansible/executor/powershell/async_watchdog.ps1 pslint:PSCustomUseLiteralPath
 lib/ansible/executor/powershell/async_wrapper.ps1 pslint:PSCustomUseLiteralPath
@@ -50,7 +51,6 @@ lib/ansible/module_utils/six/__init__.py pylint:unidiomatic-typecheck
 lib/ansible/module_utils/six/__init__.py replace-urlopen
 lib/ansible/module_utils/urls.py replace-urlopen
 lib/ansible/parsing/yaml/objects.py pylint:arguments-renamed
-lib/ansible/playbook/collectionsearch.py required-and-default-attributes  # https://github.com/ansible/ansible/issues/61460
 lib/ansible/playbook/role/include.py pylint:arguments-renamed
 lib/ansible/plugins/action/normal.py action-plugin-docs # default action plugin for modules without a dedicated action plugin
 lib/ansible/plugins/cache/base.py ansible-doc!skip  # not a plugin, but a stub for backwards compatibility
@@ -155,7 +155,6 @@ lib/ansible/plugins/action/copy.py pylint:undefined-variable
 test/integration/targets/module_utils/library/test_optional.py pylint:used-before-assignment
 test/support/windows-integration/plugins/action/win_copy.py pylint:undefined-variable
 lib/ansible/plugins/connection/__init__.py pylint:ansible-deprecated-version
-lib/ansible/vars/manager.py pylint:ansible-deprecated-version
 test/units/module_utils/basic/test_exit_json.py mypy-3.13:assignment
 test/units/module_utils/basic/test_exit_json.py mypy-3.13:misc
 test/units/module_utils/common/text/converters/test_json_encode_fallback.py mypy-3.13:abstract
